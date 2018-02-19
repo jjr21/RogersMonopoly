@@ -4,6 +4,7 @@ public class OwnHouse {
 
 	private int numberOwn;
 	
+	
 	public OwnHouse(){
 		numberOwn = 0;
 	}

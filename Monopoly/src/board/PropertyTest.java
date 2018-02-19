@@ -11,12 +11,13 @@ public class PropertyTest {
 	//private static PlayerBalance balance2;
 	private static OwnHouse own;
 	private static AmountHouseHold amountHouse;
-
+	private static VerifyOwnProperty verifyProperty;
 	public static void main(String[] args) {
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
 		own = setOwnHouse();
 		amountHouse = setAmountHouse();
+		verifyProperty = setVerifyProperty();
 		int dice = setDice();
 		displayWelcome();
 		setStartGameBalance();
@@ -41,6 +42,9 @@ public class PropertyTest {
 	}
 	public static AmountHouseHold setAmountHouse() {
 		return new AmountHouseHold();
+	}
+	public static VerifyOwnProperty setVerifyProperty() {
+		return new VerifyOwnProperty();
 	}
 	public static void displayWelcome() {
 		System.out.println("Welcome JJ's Design Monopoly");
@@ -78,6 +82,7 @@ public class PropertyTest {
 		int optionPurchase = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
 				"Purchase Property", JOptionPane.YES_NO_OPTION);
 		if(optionPurchase == JOptionPane.YES_OPTION) {
+			verifyProperty.UpdateOwnProperty(true);
 			buyProperty();
 			
 				
@@ -105,6 +110,7 @@ public class PropertyTest {
 		
 	}
 	public static void setOptionHouse() {
+		if(verifyProperty.getStatus() == true) {
 		int excaltyNumber =0;
 		Object[] buttons = {1,2,3,4,"Hotel"};
 		System.out.println(propertyInfo.getArray() + " house costs " + propertyInfo.getCost());
@@ -128,7 +134,7 @@ public class PropertyTest {
 		int buyNumber;
 		amountHouse.setNumberHold(excaltyNumber);
 		buyNumber = amountHouse.getNumberHold();
-		
+		}
 		
 	}
 	public static int setCostAfterOptionHouse() {
@@ -147,6 +153,7 @@ public class PropertyTest {
 		balance.SubBalance(setCostAfterOptionHouse());
 	}
 	public static void displayOwnHouse() {
+		System.out.println("Display boolean status for property : " + verifyProperty.getStatus());
 		System.out.println("Count House " + own.getOwn());
 	}
 
