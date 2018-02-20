@@ -1,10 +1,8 @@
 package test;
 
 public class PropertyPrice extends Property {
-	private int cost;
-	
+	private int cost, propertyCost;
 	private boolean Coummity, Chest, Jail;
-	
 	public PropertyPrice() {
 		cost = 0;
 	}
@@ -14,44 +12,49 @@ public class PropertyPrice extends Property {
 			cost = 200;
 			break;
 		case 1:
-			cost = 60;
+			propertyCost = 60;
+			cost = 50;
 			break;
-			
 		case 2:
 			Coummity = true;
 			break;
 		case 3:
-			cost = 60;
+			cost = 50;
+			propertyCost = 60;
+			
 			break;
 		case 4:
 			cost = 200;
 			break;
 		case 5:
-			cost = 200;
+			propertyCost = 200;
 			break;
 		case 6:
-			cost = 100;
+			cost = 50;
+			propertyCost = 100;
 			break;
 		case 7:
 			Chest = true;
 			break;
 		case 8: 
-			cost = 100;
+			cost = 50;
+			propertyCost = 100;
 			break;
 		case 9:
-			cost = 120;
+			cost = 50;
+			propertyCost = 120; 
 			break;
 		case 10:
 			Jail = true;
 			break;
-			
 		default:
-			
 			break;
 		}
 	}
-	
 	public int getCost() {
 		return cost;
+	}
+	public int getPropertyCost() {
+		return propertyCost;
 	}
 }
