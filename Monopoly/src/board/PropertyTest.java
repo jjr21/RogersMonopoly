@@ -12,28 +12,29 @@ public class PropertyTest {
 	private static VerifyOwnProperty verifyProperty;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
+	private static boolean continueDice = false;
+
 	public static void main(String[] args) {
+		
+	
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
 		own = setOwnHouse();
 		amountHouse = setAmountHouse();
 		verifyProperty = setVerifyProperty();
+		setStartGameBalance();
 		int dice = setDice();
 		displayWelcome();
-		setStartGameBalance();
 		displayBalance();
 		setMatchProperty(dice);
 		displayDice(dice);
 		displayPropertyName();
 		getApproveForPurchaseProperty();
-		/*
-		displayPropertyPrice();
-		setOptionPurchase();
-		setCostAfterOptionHouse();
-		feedDataHouse();
-		displayBalance();
-		displayOwnHouse();
-		*/
+		CheckBalanceGameOver();
+		
+		
+		
+		
 		System.exit(0);
 	}
 	public static PropertyPrice setPropertyPrice() {
@@ -60,16 +61,26 @@ public class PropertyTest {
 	public static void displayBalance() {
 		System.out.println("Player 1's balance : " + balance.getBalance());
 	}
+	
 	public static int setDice() {
-		int dice, dice2;
+		int max, totalDice, dice, dice2, holdTotalDice;
+		holdTotalDice = 0;
+		if(continueDice == false) {
 		dice = randomDice();
-		diceNumber = dice;
-		return dice;
+		dice2 = randomDice();
+		max = 10;
+		totalDice = dice + dice2;
+		System.out.println("First dice :" + dice + " second dice :" + dice2);
+		holdTotalDice = holdTotalDice + totalDice;
+		diceNumber = holdTotalDice;
+		
+		}
+		return holdTotalDice;
 	}
 	public static int randomDice() {
 		int diceR;
 		Random random = new Random(); 
-		diceR = random.nextInt(11);
+		diceR = random.nextInt(4);
 		return diceR;
 	}
 	public static void displayDice(int d) {
@@ -272,5 +283,12 @@ public class PropertyTest {
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
 		System.out.println("Count House " + own.getOwn());
+	}
+	public static void CheckBalanceGameOver() {
+		if(balance.getBalance() < 0 || balance.getBalance() == 0) {
+			System.out.println("Congrats you won!");
+			continueDice = true;
+		
+		}
 	}
 }
