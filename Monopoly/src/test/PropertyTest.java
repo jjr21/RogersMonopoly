@@ -1,4 +1,4 @@
-package test;
+ package test;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -10,30 +10,34 @@ public class PropertyTest {
 	private static OwnHouse own;
 	private static AmountHouseHold amountHouse;
 	private static VerifyOwnProperty verifyProperty;
+	private static DiceNumber DiceHolder;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
+	private static boolean continueDice = false;
+	private static boolean game = true;
 	public static void main(String[] args) {
+		
+	
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
 		own = setOwnHouse();
 		amountHouse = setAmountHouse();
 		verifyProperty = setVerifyProperty();
+		DiceHolder = setDiceHolder();
+		setStartGameBalance();
+		/*
 		int dice = setDice();
 		displayWelcome();
-		setStartGameBalance();
 		displayBalance();
 		setMatchProperty(dice);
 		displayDice(dice);
 		displayPropertyName();
 		getApproveForPurchaseProperty();
-		/*
-		displayPropertyPrice();
-		setOptionPurchase();
-		setCostAfterOptionHouse();
-		feedDataHouse();
-		displayBalance();
-		displayOwnHouse();
+		CheckBalanceGameOver();
 		*/
+		runGame();
+		
+		
 		System.exit(0);
 	}
 	public static PropertyPrice setPropertyPrice() {
@@ -60,16 +64,49 @@ public class PropertyTest {
 	public static void displayBalance() {
 		System.out.println("Player 1's balance : " + balance.getBalance());
 	}
+	public static DiceNumber setDiceHolder() {
+		return new DiceNumber();
+	}
+	public static void runGame() {
+		while(game = true) {
+		int dice = setDice();
+		displayWelcome();
+		displayBalance();
+		setMatchProperty(dice);
+		displayDice(dice);
+		displayPropertyName();
+		getApproveForPurchaseProperty();
+		CheckBalanceGameOver();
+		}
+	}
+	
 	public static int setDice() {
-		int dice, dice2;
+		int max, totalDice, dice, dice2, OverAgain;
+		
+		if(continueDice == false) {
 		dice = randomDice();
-		diceNumber = dice;
-		return dice;
+		dice2 = randomDice();
+		max = 10;
+		totalDice = dice + dice2;
+		DiceHolder.addDiceNumber(totalDice);
+		System.out.println("First dice :" + dice + " second dice :" + dice2 + " \n Total for this : " + totalDice);
+		int CountDice = DiceHolder.getDice();
+		if(CountDice >= max) {
+			OverAgain = CountDice - max;
+			System.out.println("OverAgain :" + OverAgain);
+			totalDice = 0 + OverAgain;
+			System.out.println("total "+ totalDice);
+			DiceHolder.setDiceNumber(totalDice);
+		}
+		diceNumber = DiceHolder.getDice();
+		
+		}
+		return diceNumber;
 	}
 	public static int randomDice() {
 		int diceR;
 		Random random = new Random(); 
-		diceR = random.nextInt(11);
+		diceR = random.nextInt(4);
 		return diceR;
 	}
 	public static void displayDice(int d) {
@@ -146,6 +183,9 @@ public class PropertyTest {
 		}
 		if(diceNumber ==5) {
 			NotHouseProperty = true;
+			boolean resultRailRoad = checkProperty();
+			System.out.println("Before purchase the property, the result of boolean : " + resultRailRoad);
+			if(resultRailRoad = true) {
 			displayPropertyPrice();
 			int optionPurchaseRailRoad = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
 					"Purchase Property", JOptionPane.YES_NO_OPTION);
@@ -156,11 +196,12 @@ public class PropertyTest {
 				feedDataHouse();
 				displayBalance();
 				displayOwnHouse();
-				
 			}
+			
 			else {
 				System.out.println("No");
-			} 
+			}
+			}
 		}
 		if(diceNumber ==7) {
 			NotHouseProperty = true;
@@ -226,6 +267,9 @@ public class PropertyTest {
 	}
 	public static boolean checkProperty() {
 		boolean checkNumber = getBooleanStatusProperty();
+		if (checkNumber == true) {
+			System.out.println("SOLD OUT for property!");
+		}
 		return checkNumber;
 	}
 	public static void setOptionHouse() {
@@ -272,5 +316,17 @@ public class PropertyTest {
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
 		System.out.println("Count House " + own.getOwn());
+	}
+	public static void CheckBalanceGameOver() {
+		if(balance.getBalance() < 0 || balance.getBalance() == 0) {
+			System.out.println("Congrats you won!");
+			continueDice = true;
+			System.exit(0);
+		
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Next Turn");
+			NotHouseProperty = false;
+		}
 	}
 }
