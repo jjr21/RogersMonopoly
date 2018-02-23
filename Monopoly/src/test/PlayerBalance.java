@@ -7,7 +7,6 @@ public class PlayerBalance {
 	public PlayerBalance() {
 		balance = 0;
 	}
-	
 	public void setBlance(int b) {
 		balance = b;
 	}

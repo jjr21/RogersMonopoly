@@ -11,33 +11,24 @@ public class PropertyTest {
 	private static AmountHouseHold amountHouse;
 	private static VerifyOwnProperty verifyProperty;
 	private static DiceNumber DiceHolder;
+	private static PropertyRentCharge propertyRent;
+	private static Jail stuckJail;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
 	private static boolean continueDice = false;
 	private static boolean game = true;
+	private static boolean jailRule = false;
 	public static void main(String[] args) {
-		
-	
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
 		own = setOwnHouse();
 		amountHouse = setAmountHouse();
 		verifyProperty = setVerifyProperty();
 		DiceHolder = setDiceHolder();
+		propertyRent = setPropertyRent();
+		stuckJail = getJailRule(); 
 		setStartGameBalance();
-		/*
-		int dice = setDice();
-		displayWelcome();
-		displayBalance();
-		setMatchProperty(dice);
-		displayDice(dice);
-		displayPropertyName();
-		getApproveForPurchaseProperty();
-		CheckBalanceGameOver();
-		*/
 		runGame();
-		
-		
 		System.exit(0);
 	}
 	public static PropertyPrice setPropertyPrice() {
@@ -57,6 +48,10 @@ public class PropertyTest {
 	}
 	public static void displayWelcome() {
 		System.out.println("Welcome JJ's Design Monopoly");
+	}
+	public static PropertyRentCharge setPropertyRent() {
+		return new PropertyRentCharge();
+		
 	}
 	public static void setStartGameBalance() {
 		balance.setBlance(1000);
@@ -79,13 +74,15 @@ public class PropertyTest {
 		CheckBalanceGameOver();
 		}
 	}
-	
 	public static int setDice() {
 		int max, totalDice, dice, dice2, OverAgain;
-		
 		if(continueDice == false) {
 		dice = randomDice();
 		dice2 = randomDice();
+		if(jailRule == true) {
+		getJailStatus(1);
+		}
+		if(jailRule == false) {
 		max = 10;
 		totalDice = dice + dice2;
 		DiceHolder.addDiceNumber(totalDice);
@@ -99,8 +96,9 @@ public class PropertyTest {
 			DiceHolder.setDiceNumber(totalDice);
 		}
 		diceNumber = DiceHolder.getDice();
-		
 		}
+		}
+	
 		return diceNumber;
 	}
 	public static int randomDice() {
@@ -133,6 +131,9 @@ public class PropertyTest {
 		String name = propertyInfo.getArray();
 		return name;
 	}
+	public static Jail getJailRule() {
+		return new Jail();
+	}
 	public static void setOptionPurchase() {
 		
 		int optionPurchase = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
@@ -148,18 +149,19 @@ public class PropertyTest {
 	public static void getApproveForPurchaseProperty() {
 		if(diceNumber == 0) {
 			NotHouseProperty = true;
-			System.out.println("$"+propertyInfo.getCost()+" added to your balance");
+			JOptionPane.showMessageDialog(null,"GOOOO $"+propertyInfo.getCost()+" added to your balance");
 			balance.AddBalance(propertyInfo.getCost());
 			displayBalance();
 		}
 		if(diceNumber ==2) {
 			NotHouseProperty = true;
-			System.out.println("COMMUNITY CHEST: you got bonus $300!");
+			JOptionPane.showMessageDialog(null,"COMMUNITY CHEST: you got bonus $300!");
 			balance.AddBalance(300);
 			displayBalance();
 		}
 		if(diceNumber == 4) {
 			NotHouseProperty = true;
+			JOptionPane.showMessageDialog(null, "TAXXXXX");
 			int tax1, tax2, tax1Percent, tax1Result;
 			System.out.println("Your balance" +balance.getBalance());
 			tax1 = balance.getBalance();
@@ -185,7 +187,7 @@ public class PropertyTest {
 			NotHouseProperty = true;
 			boolean resultRailRoad = checkProperty();
 			System.out.println("Before purchase the property, the result of boolean : " + resultRailRoad);
-			if(resultRailRoad = true) {
+			if(resultRailRoad == false) {
 			displayPropertyPrice();
 			int optionPurchaseRailRoad = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
 					"Purchase Property", JOptionPane.YES_NO_OPTION);
@@ -205,13 +207,17 @@ public class PropertyTest {
 		}
 		if(diceNumber ==7) {
 			NotHouseProperty = true;
-			System.out.println("CHANCE: you got bonus $100!");
+			JOptionPane.showMessageDialog(null,"CHANCE: you got bonus $100!");
 			balance.AddBalance(100);
 			displayBalance();
 		}
 		if(diceNumber ==10) {
 			NotHouseProperty = true;
 			System.out.println("JAILLLLLLLL");
+			jailRule = true;
+			stuckJail.setJail(jailRule);
+			
+			
 		}
 		if(NotHouseProperty == false) {
 			boolean result = checkProperty();
@@ -227,6 +233,7 @@ public class PropertyTest {
 		else {
 			String input = getNameProperty();
 			System.out.println("Player own this property " + input + "Rent : ");
+			propertyRentCharge();
 		}
 		}
 	}
@@ -268,7 +275,7 @@ public class PropertyTest {
 	public static boolean checkProperty() {
 		boolean checkNumber = getBooleanStatusProperty();
 		if (checkNumber == true) {
-			System.out.println("SOLD OUT for property!");
+			JOptionPane.showMessageDialog(null,"SOLD OUT for property! You have to pay rent!");
 		}
 		return checkNumber;
 	}
@@ -316,6 +323,52 @@ public class PropertyTest {
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
 		System.out.println("Count House " + own.getOwn());
+	}
+	public static void propertyRentCharge() {
+		System.out.println("Rent Costs");
+		chargeRent();
+	}
+	public static void chargeRent() {
+		int numberOfHouse;
+		int costRent=0;
+		numberOfHouse = amountHouse.getNumberHold();
+		if(diceNumber == 1) {
+			 propertyRent.PropertyRent(1, numberOfHouse);
+			 costRent = propertyRent.getRent1();
+				
+		}
+		if(diceNumber == 3) {
+			propertyRent.PropertyRent(3, numberOfHouse);
+			costRent = propertyRent.getRent3();
+		}
+		if(diceNumber == 5) {
+			propertyRent.PropertyRent(5, 0);
+			costRent = propertyRent.getRent5();
+		}
+		if(diceNumber == 6) {
+			propertyRent.PropertyRent(6, numberOfHouse);
+			costRent = propertyRent.getRent6();
+		}
+		if(diceNumber == 8) {
+			propertyRent.PropertyRent(8, numberOfHouse);
+			costRent = propertyRent.getRent8();
+		}
+		if(diceNumber == 9) {
+			propertyRent.PropertyRent(9, numberOfHouse);
+			costRent = propertyRent.getRent9();
+		}
+		JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent);
+	}
+	public static boolean getJailStatus(int i) {
+		int x = 0;
+		x += i;
+		if (x ==3) {
+			jailRule = false;
+			stuckJail.setJail(jailRule);
+			
+		}
+		jailRule = stuckJail.getJail();
+		return jailRule;
 	}
 	public static void CheckBalanceGameOver() {
 		if(balance.getBalance() < 0 || balance.getBalance() == 0) {

@@ -3,7 +3,6 @@ package test;
 public class DiceNumber {
 
 	private int number;
-	
 	public DiceNumber() {
 		number = 0;
 	}
