@@ -3,6 +3,7 @@
 import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+import java.util.concurrent.ThreadLocalRandom;
 public class PropertyTest {
 	private static PropertyPrice propertyInfo;
 	private static PlayerBalance balance;
@@ -13,11 +14,15 @@ public class PropertyTest {
 	private static DiceNumber DiceHolder;
 	private static PropertyRentCharge propertyRent;
 	private static Jail stuckJail;
+	private static HoldNumberDicesJail numberjail;
+	private static ColorProperties colorLand;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
 	private static boolean continueDice = false;
 	private static boolean game = true;
 	private static boolean jailRule = false;
+	private static int x = 0;
+	private static boolean sameNumberJail = true;
 	public static void main(String[] args) {
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
@@ -27,6 +32,8 @@ public class PropertyTest {
 		DiceHolder = setDiceHolder();
 		propertyRent = setPropertyRent();
 		stuckJail = getJailRule(); 
+		numberjail = setNumberJails();
+		colorLand = setColorLand();
 		setStartGameBalance();
 		runGame();
 		System.exit(0);
@@ -53,6 +60,9 @@ public class PropertyTest {
 		return new PropertyRentCharge();
 		
 	}
+	public static ColorProperties setColorLand() {
+		return new ColorProperties();
+	}
 	public static void setStartGameBalance() {
 		balance.setBlance(1000);
 	}
@@ -61,6 +71,9 @@ public class PropertyTest {
 	}
 	public static DiceNumber setDiceHolder() {
 		return new DiceNumber();
+	}
+	public static HoldNumberDicesJail setNumberJails() {
+		return new HoldNumberDicesJail();
 	}
 	public static void runGame() {
 		while(game = true) {
@@ -74,13 +87,34 @@ public class PropertyTest {
 		CheckBalanceGameOver();
 		}
 	}
+	
 	public static int setDice() {
 		int max, totalDice, dice, dice2, OverAgain;
 		if(continueDice == false) {
 		dice = randomDice();
 		dice2 = randomDice();
 		if(jailRule == true) {
-		getJailStatus(1);
+		getJailStatus(dice, dice2);
+		
+		if(sameNumberJail = false) {
+			System.out.println("Test True Jail");
+			max = 10;
+			dice = numberjail.getNumberJailA();
+			dice2 = numberjail.getNumberJailB();
+			totalDice = dice + dice2;
+			DiceHolder.addDiceNumber(totalDice);
+			System.out.println("First dice :" + dice + " second dice :" + dice2 + " \n Total for this : " + totalDice);
+			int CountDice = totalDice;
+			if(CountDice >= max) {
+				OverAgain = CountDice - max;
+				System.out.println("OverAgain :" + OverAgain);
+				totalDice = 0 + OverAgain;
+				System.out.println("total "+ totalDice);
+				DiceHolder.setDiceNumber(totalDice);
+				PassGo();
+			}
+			diceNumber = DiceHolder.getDice();
+		}
 		}
 		if(jailRule == false) {
 		max = 10;
@@ -94,6 +128,7 @@ public class PropertyTest {
 			totalDice = 0 + OverAgain;
 			System.out.println("total "+ totalDice);
 			DiceHolder.setDiceNumber(totalDice);
+			PassGo();
 		}
 		diceNumber = DiceHolder.getDice();
 		}
@@ -101,10 +136,12 @@ public class PropertyTest {
 	
 		return diceNumber;
 	}
+	
 	public static int randomDice() {
 		int diceR;
-		Random random = new Random(); 
-		diceR = random.nextInt(4);
+		//Random random = new Random(); 
+		diceR = ThreadLocalRandom.current().nextInt(1,7);
+		//diceR = random.nextInt(4);
 		return diceR;
 	}
 	public static void displayDice(int d) {
@@ -140,6 +177,8 @@ public class PropertyTest {
 				"Purchase Property", JOptionPane.YES_NO_OPTION);
 		if(optionPurchase == JOptionPane.YES_OPTION) {
 			verifyProperty.UpdateOwnProperty(diceNumber,true);
+			colorLand.setPoperties(diceNumber, true);
+			System.out.println("TESSSTT COLORLAND : " + colorLand.checkPurple() + " diceNumber : " + diceNumber);
 			buyProperty();
 		}
 		else {
@@ -149,9 +188,7 @@ public class PropertyTest {
 	public static void getApproveForPurchaseProperty() {
 		if(diceNumber == 0) {
 			NotHouseProperty = true;
-			JOptionPane.showMessageDialog(null,"GOOOO $"+propertyInfo.getCost()+" added to your balance");
-			balance.AddBalance(propertyInfo.getCost());
-			displayBalance();
+			
 		}
 		if(diceNumber ==2) {
 			NotHouseProperty = true;
@@ -192,7 +229,8 @@ public class PropertyTest {
 			int optionPurchaseRailRoad = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
 					"Purchase Property", JOptionPane.YES_NO_OPTION);
 			if(optionPurchaseRailRoad == JOptionPane.YES_OPTION) {
-				verifyProperty.UpdateOwnProperty(diceNumber,true);
+				verifyProperty.UpdateOwnProperty(5,true);
+				colorLand.setPoperties(diceNumber, true);
 				amountHouse.setNumberHold(1);
 				balance.SubBalance(200);
 				feedDataHouse();
@@ -204,6 +242,12 @@ public class PropertyTest {
 				System.out.println("No");
 			}
 			}
+			if(resultRailRoad == true) {
+				//JOptionPane.showMessageDialog(null,"This area is owned, costs you 250");
+				System.out.println("Player own this property 250 Rent : ");
+				propertyRentCharge();
+			}
+			
 		}
 		if(diceNumber ==7) {
 			NotHouseProperty = true;
@@ -213,7 +257,7 @@ public class PropertyTest {
 		}
 		if(diceNumber ==10) {
 			NotHouseProperty = true;
-			System.out.println("JAILLLLLLLL");
+			JOptionPane.showMessageDialog(null, "JAILLLLLLLL");
 			jailRule = true;
 			stuckJail.setJail(jailRule);
 			
@@ -237,10 +281,14 @@ public class PropertyTest {
 		}
 		}
 	}
+	//after purchase property, below here to purchase house
 	public static void buyProperty() {
 		balance.SubBalance(propertyInfo.getPropertyCost());
 		System.out.println("Your balance after bought property, " + balance.getBalance());
-		System.out.println("Congrats, you bought the property, you may buy house");
+		System.out.println("Congrats, you bought the property, you may buy house if you own all color as properties");
+		boolean statusColor = checkColor(diceNumber);
+		if(statusColor == true) {
+		JOptionPane.showMessageDialog(null, "Congrats you own all propeties! you may purchase house!");
 		int optionPurchase = JOptionPane.showConfirmDialog(null, "Would you like to purchase House" + propertyInfo.getArray() + " ?",
 				"Purchase Property House ", JOptionPane.YES_NO_OPTION);
 		if(optionPurchase == JOptionPane.YES_OPTION) {
@@ -250,6 +298,47 @@ public class PropertyTest {
 		else {
 			System.out.println("No");
 		}
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"You do not own all properties, you cannot buy any house for this moment");
+		}
+	}
+	public static boolean checkColor(int dice) {
+		boolean colorPropertiesStatus = false;
+		switch(dice) {
+		case 0:
+			break;
+		case 1:
+			colorPropertiesStatus = colorLand.checkPurple();
+			break;
+		case 2:
+			break;
+		case 3:
+			colorPropertiesStatus = colorLand.checkPurple();
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			colorPropertiesStatus = colorLand.checkCyan();
+			break;
+		case 7:
+			break;
+		case 8:
+			colorPropertiesStatus = colorLand.checkCyan();
+			break;
+		case 9:
+			colorPropertiesStatus = colorLand.checkCyan();
+			break;
+		case 10:
+			break;
+		
+		default:
+			System.out.println("No Match");
+			break;
+		}
+		return colorPropertiesStatus;
 	}
 	public static boolean getBooleanStatusProperty() {
 		int number = getDice();
@@ -260,6 +349,9 @@ public class PropertyTest {
 		}
 		if(number == 3) {
 			status = verifyProperty.getStatus3();
+		}
+		if(number ==5) {
+			status = verifyProperty.getStatus5();
 		}
 		if(number == 6) {
 			status = verifyProperty.getStatus6();
@@ -282,90 +374,137 @@ public class PropertyTest {
 	public static void setOptionHouse() {
 		if(getBooleanStatusProperty() == true) {
 		int excaltyNumber =0;
-		Object[] buttons = {1,2,3,4,"Hotel"};
+		Object[] buttons = {0,1,2,3,4,"Hotel"};
 		System.out.println(propertyInfo.getArray() + " house costs " + propertyInfo.getCost());
 		int optionHouse = JOptionPane.showOptionDialog(null, "How much do you would like to purchase " + propertyInfo.getArray() + " ?",
 				"Purchase Property", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null, buttons, buttons[0]);
 		if(optionHouse ==0) {
-			excaltyNumber = 1;
+			excaltyNumber = 0;
 		}
 		if(optionHouse ==1) {
-			excaltyNumber = 2;
+			excaltyNumber = 1;
 		}
 		if(optionHouse ==2) {
-			excaltyNumber = 3;
+			excaltyNumber = 2;
 		}
 		if(optionHouse ==3) {
-			excaltyNumber = 4;
+			excaltyNumber = 3;
 		}
 		if(optionHouse ==4) {
+			excaltyNumber = 4;
+		}
+		if(optionHouse ==5) {
 			excaltyNumber = 5;
 		}
-		int buyNumber;
+	
 		amountHouse.setNumberHold(excaltyNumber);
-		buyNumber = amountHouse.getNumberHold();
+		 System.out.println("Test escaltyNumber : " +amountHouse.getNumberHold());
 		}
 	}
 	public static int setCostAfterOptionHouse() {
-		int number;
+		int number =0;;
 		number =  amountHouse.getNumberHold();
 		number = number * propertyInfo.getCost();
 		return number;
 	}
 	public static void feedDataHouse() {
-		own.OwnMediterranean(amountHouse.getNumberHold());
+		System.out.println("feed number amount" + amountHouse.getNumberHold());
+		//own.OwnMediterranean(amountHouse.getNumberHold());
+		own.setOwn(diceNumber, amountHouse.getNumberHold());
 		SubBalance();
-		
+		amountHouse.setNumberHold(0);
 	}
 	public static void SubBalance() {
 		balance.SubBalance(setCostAfterOptionHouse());
 	}
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
-		System.out.println("Count House " + own.getOwn());
+		if(diceNumber ==1) {
+		System.out.println("Count House " + own.getOwn1());
+	}
+		if(diceNumber ==3) {
+			System.out.println("Count House " + own.getOwn3());
+		}
+		if(diceNumber ==5) {
+			System.out.println("Count House " + own.getOwn5());
+		}
+		if(diceNumber ==6) {
+			System.out.println("Count House " + own.getOwn6());
+		}
+		if(diceNumber ==8) {
+			System.out.println("Count House " + own.getOwn8());
+		}
+		if(diceNumber ==9) {
+			System.out.println("Count House " + own.getOwn9());
+		}
 	}
 	public static void propertyRentCharge() {
 		System.out.println("Rent Costs");
 		chargeRent();
 	}
 	public static void chargeRent() {
-		int numberOfHouse;
-		int costRent=0;
-		numberOfHouse = amountHouse.getNumberHold();
+		int numberOfHouse =0;
+		
+		
+		System.out.println("testtt :" + numberOfHouse);
 		if(diceNumber == 1) {
+			numberOfHouse = own.getOwn1();
 			 propertyRent.PropertyRent(1, numberOfHouse);
-			 costRent = propertyRent.getRent1();
+			 int costRent1 = propertyRent.getRent1();
+			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent1);
 				
 		}
 		if(diceNumber == 3) {
+			numberOfHouse = own.getOwn3();
 			propertyRent.PropertyRent(3, numberOfHouse);
-			costRent = propertyRent.getRent3();
+			int costRent3 = propertyRent.getRent3();
+			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent3);
 		}
 		if(diceNumber == 5) {
+			numberOfHouse = own.getOwn5();
 			propertyRent.PropertyRent(5, 0);
-			costRent = propertyRent.getRent5();
+			int costRent5 = propertyRent.getRent5();
+			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent5);
 		}
 		if(diceNumber == 6) {
+			numberOfHouse = own.getOwn6();
 			propertyRent.PropertyRent(6, numberOfHouse);
-			costRent = propertyRent.getRent6();
+			int costRent6 = propertyRent.getRent6();
+			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent6);
 		}
 		if(diceNumber == 8) {
+			numberOfHouse = own.getOwn8();
 			propertyRent.PropertyRent(8, numberOfHouse);
-			costRent = propertyRent.getRent8();
+			int costRent8 = propertyRent.getRent8();
+			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent8);
 		}
-		if(diceNumber == 9) {
+		if(diceNumber == 9) { 
+			numberOfHouse = own.getOwn9();
 			propertyRent.PropertyRent(9, numberOfHouse);
-			costRent = propertyRent.getRent9();
+			int costRent9 = propertyRent.getRent9();
+			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent9);
 		}
-		JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent);
+	
 	}
-	public static boolean getJailStatus(int i) {
-		int x = 0;
-		x += i;
+	public static void PassGo() {
+		JOptionPane.showMessageDialog(null,"Pass GO! $200 added to your balance");
+		balance.AddBalance(200);
+	}
+	public static boolean getJailStatus(int a, int b) {
+		System.out.println("first dice : " + a + " second dice : " + b);
+		x++;
+		System.out.println("X " + x);
 		if (x ==3) {
 			jailRule = false;
 			stuckJail.setJail(jailRule);
-			
+			x =0;
+		}
+		if(a ==b) {
+			jailRule = false;
+			stuckJail.setJail(jailRule);
+			sameNumberJail = false;
+			numberjail.setNumberJail(a, b);
+			x=0;
 		}
 		jailRule = stuckJail.getJail();
 		return jailRule;
