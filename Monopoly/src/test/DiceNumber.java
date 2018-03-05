@@ -2,15 +2,16 @@ package test;
 
 public class DiceNumber {
 
-	private int number, holdNumber1, holdNumber2;
+	private int number1, number2, holdNumber1, holdNumber2;
 	public DiceNumber() {
-		number = 0;
+		number1 = 0;
+		number2 = 0;
 		holdNumber1 = 0;
 		holdNumber2 = 0;
 		
 	}
 	public void setDiceNumber(int d) {
-		number = d;
+		number1 = d;
 	}
 	public void setHoldNumber1(int first) {
 		holdNumber1 = first;
@@ -19,10 +20,16 @@ public class DiceNumber {
 		holdNumber2= second;
 	}
 	public void addDiceNumber(int add) {
-		number += add;
+		number1 += add;
 	}
 	public int getDice() {
-		return number;
+		return number1;
+	}
+	public void addDiceNumber2(int add) {
+		number2 += add;
+	}
+	public int getDice2() {
+		return number2;
 	}
 	public int getHoldNumber1() {
 		return holdNumber1;
@@ -31,4 +38,6 @@ public class DiceNumber {
 	public int getHoldNUmber2() {
 		return holdNumber2;
 	}
+	
+	
 }

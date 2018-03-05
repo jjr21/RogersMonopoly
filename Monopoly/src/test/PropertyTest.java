@@ -25,7 +25,7 @@ public class PropertyTest {
 	private static boolean jailRule = false;
 	private static int x = 0;
 	private static boolean sameNumberJail = true;
-	private static int holdTurn =1;
+	private static int holdTurn;
 	public static void main(String[] args) {
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
@@ -40,8 +40,11 @@ public class PropertyTest {
 		stuckJail = getJailRule();    
 		numberjail = setNumberJails();
 		colorLand = setColorLand();
+		setTurn();
 		setStartGameBalance();
 		runGame();
+		
+		
 		System.exit(0);
 	}
 	public static PropertyPrice setPropertyPrice() {
@@ -76,7 +79,9 @@ public class PropertyTest {
 	public static void displayBalance() {
 		System.out.println("Player 1's balance : " + balance.getBalance());
 	}
-	
+	public static void setTurn() {
+		holdTurn = 1;
+	}
 	public static DiceNumber setDiceHolder() {
 		return new DiceNumber();
 	}
@@ -128,13 +133,14 @@ public static void AddBalance(int turn) {
 	
 	public static int setDice() {
 		int max, totalDice, dice, dice2, OverAgain;
+		
 		totalDice = getTurnDice();
 		if(continueDice == false) {
 		dice = randomDice();
 		dice2 = randomDice();
 		if(jailRule == true) {
 		getJailStatus(dice, dice2);
-		
+		//Jail result below here
 		if(sameNumberJail = false) {
 			System.out.println("Test True Jail");
 			max = 10;
@@ -155,10 +161,17 @@ public static void AddBalance(int turn) {
 			diceNumber = DiceHolder.getDice();
 		}
 		}
+		//not related to jail result below here 
 		if(jailRule == false) {
 		max = 10;
 		totalDice = dice + dice2;
-		DiceHolder.addDiceNumber(totalDice);
+		if (holdTurn == 1) {
+			DiceHolder.addDiceNumber(totalDice);
+		}
+		if (holdTurn == 2) {
+			DiceHolder.addDiceNumber2(totalDice);
+		}
+		
 		if(holdTurn ==1) {
 			DiceHolder.setHoldNumber1(totalDice);
 		}
@@ -166,7 +179,9 @@ public static void AddBalance(int turn) {
 			DiceHolder.setHoldNumber2(totalDice);
 		}
 		System.out.println("First dice :" + dice + " second dice :" + dice2 + " \n Total for this : " + totalDice);
+		//problem below here, fix here
 		int CountDice = DiceHolder.getDice();
+		System.out.println("error here test : CountDice : " + CountDice);
 		if(CountDice > max) {
 			OverAgain = CountDice - max;
 			System.out.println("OverAgain :" + OverAgain);
@@ -220,14 +235,15 @@ public static void AddBalance(int turn) {
 		return holdTurn;
 	}
 	public static int getTurnDice() {
-		int holdexample=0;
+		int TurnX = 0;
 		if(holdTurn ==1) {
-			holdexample = DiceHolder.getHoldNumber1();
+			 TurnX= DiceHolder.getHoldNumber1();
 		}
 		if(holdTurn ==2) {
-			holdexample = DiceHolder.getHoldNUmber2();
+			  TurnX=DiceHolder.getHoldNUmber2();
 		}
-		return holdexample;
+		return TurnX;
+		
 	}
 	public static void setMatchProperty(int d) {
 		propertyInfo.MatchBoxArray(d); //Find Property's name
@@ -594,6 +610,7 @@ public static void AddBalance(int turn) {
 		else {
 			JOptionPane.showMessageDialog(null, "Next Turn");
 			NotHouseProperty = false;
+			countTurn();
 		}
 	}
 }
