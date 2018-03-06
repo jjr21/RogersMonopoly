@@ -1,4 +1,4 @@
-  package test;
+ package Test2;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -7,13 +7,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PropertyTest {
 	private static PropertyPrice propertyInfo;
 	private static PlayerBalance balance;
-	private static PlayerBalance balance2;
-	//private static PlayerBalance balance3;
-	//private static PlayerBalance balance4;
+	//private static PlayerBalance balance2;
 	private static OwnHouse own;
 	private static AmountHouseHold amountHouse;
 	private static VerifyOwnProperty verifyProperty;
-	private static DiceNumber DiceHolder;
+	private static playerTurn DiceHolder;
 	private static PropertyRentCharge propertyRent;
 	private static Jail stuckJail;
 	private static HoldNumberDicesJail numberjail;
@@ -25,26 +23,21 @@ public class PropertyTest {
 	private static boolean jailRule = false;
 	private static int x = 0;
 	private static boolean sameNumberJail = true;
-	private static int holdTurn;
+	private static int currentTurn =1;
 	public static void main(String[] args) {
 		propertyInfo = setPropertyPrice();
 		balance = setPlayerBalance();
-		balance2 = setPlayerBalance();
-		//balance3 = setPlayerBalance();
-		//balance4 = setPlayerBalance();
 		own = setOwnHouse();
 		amountHouse = setAmountHouse();
 		verifyProperty = setVerifyProperty();
 		DiceHolder = setDiceHolder();
 		propertyRent = setPropertyRent();
-		stuckJail = getJailRule();    
+		stuckJail = getJailRule(); 
 		numberjail = setNumberJails();
 		colorLand = setColorLand();
-		setTurn();
+		displayWelcome();
 		setStartGameBalance();
 		runGame();
-		
-		
 		System.exit(0);
 	}
 	public static PropertyPrice setPropertyPrice() {
@@ -74,79 +67,52 @@ public class PropertyTest {
 	}
 	public static void setStartGameBalance() {
 		balance.setBlance(1000);
-		balance2.setBlance(1000);
 	}
 	public static void displayBalance() {
-		if(holdTurn == 1){
+		if(currentTurn ==1) {
 			System.out.println("Player 1's balance : " + balance.getBalance());
 		}
-		if (holdTurn ==2){
-			System.out.println("Player 2's balance : " + balance2.getBalance());
+		if(currentTurn ==2) {
+			System.out.println("Player 2's balance : " + balance.getBalance2());
 		}
 		
 	}
-	public static void setTurn() {
-		holdTurn = 1;
+	public static playerTurn setDiceHolder() {
+		return new playerTurn();
 	}
-	public static DiceNumber setDiceHolder() {
-		return new DiceNumber();
+	
+	public static void addPlayerTurn() {
+		currentTurn ++;
+		if(currentTurn ==3) {
+			currentTurn =1;
+		}
+	
 	}
 	public static HoldNumberDicesJail setNumberJails() {
 		return new HoldNumberDicesJail();
 	}
-	public static void verifyPlayerBalance(int turn) {
-		if (turn == 1) {
-			System.out.println("player " + turn + " balance : "+ balance.getBalance());
-		}
-		if(turn == 2) {
-			System.out.println("player " + turn + " balance : " + balance2.getBalance());
-		}
-	}
-public static void SubBalance(int turn) {
-	if (turn == 1) {
-		balance.SubBalance(setCostAfterOptionHouse());
-		System.out.println("After sub balance, player " + turn + " balance : "+ balance.getBalance());
-	}
-	if(turn == 2) {
-		balance2.SubBalance(setCostAfterOptionHouse());
-		System.out.println("After sub balance, player " + turn + " balance : " + balance2.getBalance());
-	}
-		
-	}
-public static void AddBalance(int turn) {
-	if (turn == 1) {
-		balance.AddBalance(setCostAfterOptionHouse());
-		System.out.println("After add balance, player " + turn + " balance : "+ balance.getBalance());
-	}
-	if(turn == 2) {
-		balance2.AddBalance(setCostAfterOptionHouse());
-		System.out.println("After add balance, player " + turn + " balance : " + balance2.getBalance());
-	}
-		
-	}
 	public static void runGame() {
 		while(game = true) {
 		int dice = setDice();
-		displayWelcome();
 		displayBalance();
 		setMatchProperty(dice);
 		displayDice(dice);
 		displayPropertyName();
 		getApproveForPurchaseProperty();
 		CheckBalanceGameOver();
+		addPlayerTurn();
 		}
 	}
 	
 	public static int setDice() {
 		int max, totalDice, dice, dice2, OverAgain;
-		
-		totalDice = getTurnDice();
 		if(continueDice == false) {
 		dice = randomDice();
 		dice2 = randomDice();
+		//jail status is true
 		if(jailRule == true) {
 		getJailStatus(dice, dice2);
-		//Jail result below here
+		
 		if(sameNumberJail = false) {
 			System.out.println("Test True Jail");
 			max = 10;
@@ -154,7 +120,7 @@ public static void AddBalance(int turn) {
 			dice2 = numberjail.getNumberJailB();
 			totalDice = dice + dice2;
 			DiceHolder.addDiceNumber(totalDice);
-			System.out.println("First dice :" + dice + " second dice :" + dice2 + " \n Total for this : " + totalDice);
+			System.out.println("First dice :" + dice + " second dice :" + dice2 + " ---- Total of Dices : " + totalDice);
 			int CountDice = totalDice;
 			if(CountDice > max) {
 				OverAgain = CountDice - max;
@@ -167,64 +133,42 @@ public static void AddBalance(int turn) {
 			diceNumber = DiceHolder.getDice();
 		}
 		}
-		//not related to jail result below here 
+		//jail status is false
 		if(jailRule == false) {
 		max = 10;
 		totalDice = dice + dice2;
-		if (holdTurn == 1) {
-			DiceHolder.addDiceNumber(totalDice);
+		DiceHolder.addDiceNumber(totalDice);
+		System.out.println("First dice :" + dice + " second dice :" + dice2 + " --- Total of Dices  : " + totalDice);
+		int CountDice = DiceHolder.getDice();
+		int countDicePlayerPrevious =0;
+		if(currentTurn ==1) {
+			countDicePlayerPrevious = DiceHolder.getPlayer1();
 		}
-		if (holdTurn == 2) {
-			DiceHolder.addDiceNumber2(totalDice);
+		if(currentTurn ==2) {
+			countDicePlayerPrevious = DiceHolder.getPlayer2();
 		}
-		
-		if(holdTurn ==1) {
-			DiceHolder.setHoldNumber1(totalDice);
-		}
-		if(holdTurn == 2) {
-			DiceHolder.setHoldNumber2(totalDice);
-		}
-		System.out.println("First dice :" + dice + " second dice :" + dice2 + " \n Total for this : " + totalDice);
-		//problem below here, fix here
-		//int CountDice = DiceHolder.getDice();
-		int CountDice =0;
-		if (holdTurn == 1){
-			CountDice = DiceHolder.getDice();
-		}
-		if(holdTurn == 2){
-			CountDice = DiceHolder.getDice2();
-		}
-		System.out.println("error here test : CountDice : " + CountDice);
+		System.out.println("test currentTurn return value method : " + countDicePlayerPrevious);
+		CountDice = CountDice + countDicePlayerPrevious;
 		if(CountDice > max) {
 			OverAgain = CountDice - max;
 			System.out.println("OverAgain :" + OverAgain);
 			totalDice = 0 + OverAgain;
 			System.out.println("total "+ totalDice);
-			//test add holdDice1 & 2
-			if(holdTurn ==1) {
-				DiceHolder.setHoldNumber1(totalDice);
-				DiceHolder.addDiceNumber(totalDice);
-			}
-			if(holdTurn == 2) {
-				DiceHolder.setHoldNumber2(totalDice);
-				DiceHolder.addDiceNumber2(totalDice);
-			}
-			//DiceHolder.setDiceNumber(totalDice);
+			DiceHolder.setDiceNumber(totalDice);
 			PassGo();
 		}
-		if(holdTurn ==1) {
-			diceNumber = DiceHolder.getHoldNumber1();
+		else {
+			DiceHolder.setDiceNumber(CountDice);
 		}
-		if(holdTurn == 2) {
-			diceNumber = DiceHolder.getHoldNUmber2();
-		}
-		System.out.println("holdTurn :::"+ holdTurn);
-		System.out.println("dice :::"+ diceNumber);
-		//diceNumber = DiceHolder.getDice();
+		diceNumber = DiceHolder.getDice();
 		}
 		}
-		//test totalDice = 0
-		//DiceHolder.setDiceNumber(0);
+		if(currentTurn ==1) {
+			DiceHolder.setPlayer1(diceNumber);
+		}
+		if(currentTurn ==2) {
+			DiceHolder.setPlayer2(diceNumber);
+		}
 		return diceNumber;
 	}
 	
@@ -241,25 +185,7 @@ public static void AddBalance(int turn) {
 	public static int getDice() {
 		return diceNumber;
 	}
-	//pause here
-	public static int countTurn() {
-		holdTurn++;
-		if(holdTurn == 3) {
-			holdTurn = 1;
-		}
-		return holdTurn;
-	}
-	public static int getTurnDice() {
-		int TurnX = 0;
-		if(holdTurn ==1) {
-			 TurnX= DiceHolder.getHoldNumber1();
-		}
-		if(holdTurn ==2) {
-			  TurnX=DiceHolder.getHoldNUmber2();
-		}
-		return TurnX;
-		
-	}
+	
 	public static void setMatchProperty(int d) {
 		propertyInfo.MatchBoxArray(d); //Find Property's name
 		propertyInfo.MatchArrayPrice(d); //find Property's cost info
@@ -302,7 +228,7 @@ public static void AddBalance(int turn) {
 		if(diceNumber ==2) {
 			NotHouseProperty = true;
 			JOptionPane.showMessageDialog(null,"COMMUNITY CHEST: you got bonus $300!");
-			balance.AddBalance(300);
+			balance.AddBalance(currentTurn, 300);
 			displayBalance();
 		}
 		if(diceNumber == 4) {
@@ -321,10 +247,10 @@ public static void AddBalance(int turn) {
 			int taxChoose = JOptionPane.showOptionDialog(null, "first tax based ten percent of your balance : " + tax1Result +" . Secondly "+
 					 "tax costs only " + tax2, "Tax Option", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,null, taxButton, taxButton[0]);
 			if(taxChoose == 0) {
-				balance.SubBalance(tax1Result);
+				balance.SubBalance(currentTurn,tax1Result);
 			} 
 			if(taxChoose ==1) {
-				balance.SubBalance(tax2);
+				balance.SubBalance(currentTurn,tax2);
 			}
 			displayBalance();
 			
@@ -341,7 +267,7 @@ public static void AddBalance(int turn) {
 				verifyProperty.UpdateOwnProperty(5,true);
 				colorLand.setPoperties(diceNumber, true);
 				amountHouse.setNumberHold(1);
-				balance.SubBalance(200);
+				balance.SubBalance(currentTurn,200);
 				feedDataHouse();
 				displayBalance();
 				displayOwnHouse();
@@ -361,7 +287,7 @@ public static void AddBalance(int turn) {
 		if(diceNumber ==7) {
 			NotHouseProperty = true;
 			JOptionPane.showMessageDialog(null,"CHANCE: you got bonus $100!");
-			balance.AddBalance(100);
+			balance.AddBalance(currentTurn,100);
 			displayBalance();
 		}
 		if(diceNumber ==10) {
@@ -392,15 +318,9 @@ public static void AddBalance(int turn) {
 	}
 	//after purchase property, below here to purchase house
 	public static void buyProperty() {
-		if(holdTurn ==1){
-			balance.SubBalance(propertyInfo.getPropertyCost());
-			System.out.println("Your balance after bought property, " + balance.getBalance());
-		}
-		if(holdTurn == 2){
-			balance2.SubBalance(propertyInfo.getPropertyCost());
-			System.out.println("Your balance after bought property, " + balance2.getBalance());
-		}
-	
+		balance.SubBalance(currentTurn,propertyInfo.getPropertyCost());
+		displayBalance();
+		//System.out.println("Your balance after bought property, " + balance.getBalance());
 		System.out.println("Congrats, you bought the property, you may buy house if you own all color as properties");
 		boolean statusColor = checkColor(diceNumber);
 		if(statusColor == true) {
@@ -527,8 +447,11 @@ public static void AddBalance(int turn) {
 		System.out.println("feed number amount" + amountHouse.getNumberHold());
 		//own.OwnMediterranean(amountHouse.getNumberHold());
 		own.setOwn(diceNumber, amountHouse.getNumberHold());
-		SubBalance(holdTurn);
+		SubBalance();
 		amountHouse.setNumberHold(0);
+	}
+	public static void SubBalance() {
+		balance.SubBalance(currentTurn,setCostAfterOptionHouse());
 	}
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
@@ -601,7 +524,12 @@ public static void AddBalance(int turn) {
 	}
 	public static void PassGo() {
 		JOptionPane.showMessageDialog(null,"Pass GO! $200 added to your balance");
-		balance.AddBalance(200);
+		if(currentTurn ==1) {
+			balance.AddBalance(currentTurn, 200);
+		}
+		if(currentTurn ==2) {
+			balance.AddBalance(currentTurn, 200);
+		}
 	}
 	public static boolean getJailStatus(int a, int b) {
 		System.out.println("first dice : " + a + " second dice : " + b);
@@ -632,16 +560,7 @@ public static void AddBalance(int turn) {
 		else {
 			JOptionPane.showMessageDialog(null, "Next Turn");
 			NotHouseProperty = false;
-		
-			if (holdTurn == 1){
-				JOptionPane.showMessageDialog(null, "GetDice FUnction : " + getDice());
-				 DiceHolder.setDiceNumber(getDice());
-			}
-			if(holdTurn == 2){
-				JOptionPane.showMessageDialog(null, "GetDice FUnction : " + getDice());
-				 DiceHolder.addDiceNumber2(getDice());
-			}
-			countTurn();
+			DiceHolder.setDiceNumber(0);
 		}
 	}
 }

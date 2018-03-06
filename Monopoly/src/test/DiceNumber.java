@@ -13,6 +13,9 @@ public class DiceNumber {
 	public void setDiceNumber(int d) {
 		number1 = d;
 	}
+	public void setDiceNumber2(int e) {
+		number2 = e;
+	}
 	public void setHoldNumber1(int first) {
 		holdNumber1 = first;
 	}
