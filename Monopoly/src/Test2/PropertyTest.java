@@ -110,6 +110,7 @@ public class PropertyTest {
 		dice = randomDice();
 		dice2 = randomDice();
 		//jail status is true
+		jailRule = Jail(currentTurn);
 		if(jailRule == true) {
 		getJailStatus(dice, dice2);
 		
@@ -121,7 +122,18 @@ public class PropertyTest {
 			totalDice = dice + dice2;
 			DiceHolder.addDiceNumber(totalDice);
 			System.out.println("First dice :" + dice + " second dice :" + dice2 + " ---- Total of Dices : " + totalDice);
-			int CountDice = totalDice;
+			DiceHolder.addDiceNumber(totalDice);
+			System.out.println("First dice :" + dice + " second dice :" + dice2 + " --- Total of Dices  : " + totalDice);
+			int CountDice = DiceHolder.getDice();
+			int countDicePlayerPrevious =0;
+			if(currentTurn ==1) {
+				countDicePlayerPrevious = DiceHolder.getPlayer1();
+			}
+			if(currentTurn ==2) {
+				countDicePlayerPrevious = DiceHolder.getPlayer2();
+			}
+			System.out.println("test currentTurn return value method : " + countDicePlayerPrevious);
+			CountDice = CountDice + countDicePlayerPrevious;
 			if(CountDice > max) {
 				OverAgain = CountDice - max;
 				System.out.println("OverAgain :" + OverAgain);
@@ -129,6 +141,9 @@ public class PropertyTest {
 				System.out.println("total "+ totalDice);
 				DiceHolder.setDiceNumber(totalDice);
 				PassGo();
+			}
+			else {
+				DiceHolder.setDiceNumber(CountDice);
 			}
 			diceNumber = DiceHolder.getDice();
 		}
@@ -294,7 +309,7 @@ public class PropertyTest {
 			NotHouseProperty = true;
 			JOptionPane.showMessageDialog(null, "JAILLLLLLLL");
 			jailRule = true;
-			stuckJail.setJail(jailRule);
+			stuckJail.setJail(jailRule,currentTurn);
 			
 			
 		}
@@ -531,23 +546,37 @@ public class PropertyTest {
 			balance.AddBalance(currentTurn, 200);
 		}
 	}
+	public static boolean Jail(int a) {
+		boolean status = false;
+		switch(a) {
+		case 1:
+			status = stuckJail.getJail(a);
+			break;
+		case 2:
+			status = stuckJail.getJail(a);
+			break;
+		}
+		return status;
+	}
 	public static boolean getJailStatus(int a, int b) {
 		System.out.println("first dice : " + a + " second dice : " + b);
-		x++;
+		stuckJail.addJailcount(currentTurn);
+		x = stuckJail.getJailcount(currentTurn);
 		System.out.println("X " + x);
 		if (x ==3) {
 			jailRule = false;
-			stuckJail.setJail(jailRule);
-			x =0;
+			stuckJail.setJail(jailRule,currentTurn);
+			stuckJail.setJailcount(currentTurn);
 		}
 		if(a ==b) {
 			jailRule = false;
-			stuckJail.setJail(jailRule);
+			stuckJail.setJail(jailRule, currentTurn);
 			sameNumberJail = false;
 			numberjail.setNumberJail(a, b);
-			x=0;
+			stuckJail.setJail(jailRule,currentTurn);
+			stuckJail.setJailcount(currentTurn);
 		}
-		jailRule = stuckJail.getJail();
+		jailRule = stuckJail.getJail(currentTurn);
 		return jailRule;
 	}
 	public static void CheckBalanceGameOver() {
