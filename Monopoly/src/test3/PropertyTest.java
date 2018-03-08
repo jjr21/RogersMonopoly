@@ -1,4 +1,4 @@
- package Test2;
+ package test3;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -13,16 +13,16 @@ public class PropertyTest {
 	private static VerifyOwnProperty verifyProperty;
 	private static playerTurn DiceHolder;
 	private static PropertyRentCharge propertyRent;
-	private static Jail stuckJail;
-	private static HoldNumberDicesJail numberjail;
+	//private static Jail stuckJail;
+	//private static HoldNumberDicesJail numberjail;
 	private static ColorProperties colorLand;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
 	private static boolean continueDice = false;
 	private static boolean game = true;
 	private static boolean jailRule = false;
-	private static int x = 0;
-	private static boolean sameNumberJail = true;
+	//private static int x = 0;
+	//private static boolean sameNumberJail = true;
 	private static int currentTurn =1;
 	public static void main(String[] args) {
 		propertyInfo = setPropertyPrice();
@@ -32,8 +32,8 @@ public class PropertyTest {
 		verifyProperty = setVerifyProperty();
 		DiceHolder = setDiceHolder();
 		propertyRent = setPropertyRent();
-		stuckJail = getJailRule(); 
-		numberjail = setNumberJails();
+		//stuckJail = getJailRule(); 
+		//numberjail = setNumberJails();
 		colorLand = setColorLand();
 		displayWelcome();
 		setStartGameBalance();
@@ -109,52 +109,11 @@ public class PropertyTest {
 		if(continueDice == false) {
 		dice = randomDice();
 		dice2 = randomDice();
-		//jail status is true
 		
-		jailRule = Jail(currentTurn);
-		stuckJail.setRuleJail(jailRule, currentTurn);
-		boolean jailRuleHold;
-		jailRuleHold = stuckJail.getRuleJail(currentTurn);
-		System.out.println("JAILRULEHOLD BOOLEAN : " + jailRuleHold);
-		if(jailRuleHold == true) {
-		getJailStatus(dice, dice2);
 		
-		if(sameNumberJail = false) {
-			System.out.println("Test True Jail");
-			max = 10;
-			dice = numberjail.getNumberJailA();
-			dice2 = numberjail.getNumberJailB();
-			totalDice = dice + dice2;
-			DiceHolder.addDiceNumber(totalDice);
-			System.out.println("First dice :" + dice + " second dice :" + dice2 + " ---- Total of Dices : " + totalDice);
-			DiceHolder.addDiceNumber(totalDice);
-			System.out.println("First dice :" + dice + " second dice :" + dice2 + " --- Total of Dices  : " + totalDice);
-			int CountDice = DiceHolder.getDice();
-			int countDicePlayerPrevious =0;
-			if(currentTurn ==1) {
-				countDicePlayerPrevious = DiceHolder.getPlayer1();
-			}
-			if(currentTurn ==2) {
-				countDicePlayerPrevious = DiceHolder.getPlayer2();
-			}
-			System.out.println("test currentTurn return value method : " + countDicePlayerPrevious);
-			CountDice = CountDice + countDicePlayerPrevious;
-			if(CountDice > max) {
-				OverAgain = CountDice - max;
-				System.out.println("OverAgain :" + OverAgain);
-				totalDice = 0 + OverAgain;
-				System.out.println("total "+ totalDice);
-				DiceHolder.setDiceNumber(totalDice);
-				PassGo();
-			}
-			else {
-				DiceHolder.setDiceNumber(CountDice);
-			}
-			diceNumber = DiceHolder.getDice();
-		}
-		}
+		
 		//jail status is false
-		if(jailRuleHold == false) {
+		
 		max = 10;
 		totalDice = dice + dice2;
 		DiceHolder.addDiceNumber(totalDice);
@@ -182,23 +141,24 @@ public class PropertyTest {
 		}
 		diceNumber = DiceHolder.getDice();
 		}
-		
-		if(currentTurn ==1 && jailRuleHold == false) {
+
+		if(currentTurn ==1) {
 			DiceHolder.setPlayer1(diceNumber);
 		}
-		if(currentTurn ==2 && jailRuleHold == false) {
+		if(currentTurn ==2) {
 			DiceHolder.setPlayer2(diceNumber);
 		}
 		
 		
-		}
+		
+		
 		return diceNumber;
 	}
 	
 	public static int randomDice() {
 		int diceR;
 		//Random random = new Random(); 
-		diceR = ThreadLocalRandom.current().nextInt(1,7);
+		diceR = ThreadLocalRandom.current().nextInt(1,3);
 		//diceR = random.nextInt(4);
 		return diceR;
 	}
@@ -236,7 +196,7 @@ public class PropertyTest {
 		if(optionPurchase == JOptionPane.YES_OPTION) {
 			verifyProperty.UpdateOwnProperty(diceNumber,true);
 			colorLand.setPoperties(diceNumber, true);
-			System.out.println("TESSSTT COLORLAND : " + colorLand.checkPurple() + " diceNumber : " + diceNumber);
+			//System.out.println("TESSSTT COLORLAND : " + colorLand.checkPurple() + " diceNumber : " + diceNumber);
 			buyProperty();
 		}
 		else {
@@ -316,8 +276,7 @@ public class PropertyTest {
 		if(diceNumber ==10) {
 			NotHouseProperty = true;
 			JOptionPane.showMessageDialog(null, "JAILLLLLLLL");
-			jailRule = true;
-			stuckJail.setJail(jailRule,currentTurn);
+			
 			
 			
 		}
@@ -467,7 +426,7 @@ public class PropertyTest {
 		return number;
 	}
 	public static void feedDataHouse() {
-		System.out.println("feed number amount" + amountHouse.getNumberHold());
+		//System.out.println("feed number amount" + amountHouse.getNumberHold());
 		//own.OwnMediterranean(amountHouse.getNumberHold());
 		own.setOwn(diceNumber, amountHouse.getNumberHold());
 		SubBalance();
@@ -554,39 +513,9 @@ public class PropertyTest {
 			balance.AddBalance(currentTurn, 200);
 		}
 	}
-	public static boolean Jail(int a) {
-		boolean status = false;
-		switch(a) {
-		case 1:
-			status = stuckJail.getJail(a);
-			break;
-		case 2:
-			status = stuckJail.getJail(a);
-			break;
-		}
-		return status;
-	}
+	
 	public static boolean getJailStatus(int a, int b) {
-		System.out.println("first dice : " + a + " second dice : " + b);
-		stuckJail.addJailcount(currentTurn);
-		x = stuckJail.getJailcount(currentTurn);
-		System.out.println("X " + x);
-		if (x ==3) {
-			jailRule = false;
-			stuckJail.setJail(jailRule,currentTurn);
-			stuckJail.setJailcount(currentTurn);
-			stuckJail.setRuleJail(false, currentTurn);
-		}
-		if(a ==b) {
-			jailRule = false;
-			stuckJail.setJail(jailRule, currentTurn);
-			sameNumberJail = false;
-			numberjail.setNumberJail(a, b);
-			stuckJail.setJail(jailRule,currentTurn);
-			stuckJail.setJailcount(currentTurn);
-			stuckJail.setRuleJail(false, currentTurn);
-		}
-		jailRule = stuckJail.getJail(currentTurn);
+		
 		return jailRule;
 	}
 	public static void CheckBalanceGameOver() {
@@ -598,6 +527,7 @@ public class PropertyTest {
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "Next Turn");
+			System.out.println("*************");
 			NotHouseProperty = false;
 			DiceHolder.setDiceNumber(0);
 		}
