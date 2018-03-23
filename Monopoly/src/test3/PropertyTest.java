@@ -101,6 +101,7 @@ public class PropertyTest {
 		getApproveForPurchaseProperty();
 		CheckBalanceGameOver();
 		addPlayerTurn();
+		testWhomOwn();
 		}
 	}
 	
@@ -158,7 +159,7 @@ public class PropertyTest {
 	public static int randomDice() {
 		int diceR;
 		//Random random = new Random(); 
-		diceR = ThreadLocalRandom.current().nextInt(1,3);
+		diceR = ThreadLocalRandom.current().nextInt(1,5);
 		//diceR = random.nextInt(4);
 		return diceR;
 	}
@@ -194,7 +195,7 @@ public class PropertyTest {
 		int optionPurchase = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
 				"Purchase Property", JOptionPane.YES_NO_OPTION);
 		if(optionPurchase == JOptionPane.YES_OPTION) {
-			verifyProperty.UpdateOwnProperty(diceNumber,true);
+			verifyProperty.UpdateOwnProperty(diceNumber,true, currentTurn);
 			colorLand.setPoperties(diceNumber, true);
 			//System.out.println("TESSSTT COLORLAND : " + colorLand.checkPurple() + " diceNumber : " + diceNumber);
 			buyProperty();
@@ -247,7 +248,7 @@ public class PropertyTest {
 			int optionPurchaseRailRoad = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
 					"Purchase Property", JOptionPane.YES_NO_OPTION);
 			if(optionPurchaseRailRoad == JOptionPane.YES_OPTION) {
-				verifyProperty.UpdateOwnProperty(5,true);
+				verifyProperty.UpdateOwnProperty(5,true, currentTurn);
 				colorLand.setPoperties(diceNumber, true);
 				amountHouse.setNumberHold(1);
 				balance.SubBalance(currentTurn,200);
@@ -457,12 +458,16 @@ public class PropertyTest {
 		}
 	}
 	public static void propertyRentCharge() {
-		System.out.println("Rent Costs");
-		chargeRent();
-	}
-	public static void chargeRent() {
-		int numberOfHouse =0;
+		int rent;
+		rent = chargeRent();
+		System.out.println("Rent Costs : "+ rent );
+		checkOwner();
 		
+	}
+	public static int chargeRent() {
+		int numberOfHouse =0;
+		int rentCost = 0;
+	
 		
 		System.out.println("testtt :" + numberOfHouse);
 		if(diceNumber == 1) {
@@ -470,6 +475,7 @@ public class PropertyTest {
 			 propertyRent.PropertyRent(1, numberOfHouse);
 			 int costRent1 = propertyRent.getRent1();
 			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent1);
+			rentCost = costRent1;
 				
 		}
 		if(diceNumber == 3) {
@@ -477,32 +483,45 @@ public class PropertyTest {
 			propertyRent.PropertyRent(3, numberOfHouse);
 			int costRent3 = propertyRent.getRent3();
 			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent3);
+			rentCost = costRent3;
 		}
 		if(diceNumber == 5) {
 			numberOfHouse = own.getOwn5();
 			propertyRent.PropertyRent(5, 0);
 			int costRent5 = propertyRent.getRent5();
 			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent5);
+			rentCost = costRent5;
 		}
 		if(diceNumber == 6) {
 			numberOfHouse = own.getOwn6();
 			propertyRent.PropertyRent(6, numberOfHouse);
 			int costRent6 = propertyRent.getRent6();
 			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent6);
+			rentCost = costRent6;
 		}
 		if(diceNumber == 8) {
 			numberOfHouse = own.getOwn8();
 			propertyRent.PropertyRent(8, numberOfHouse);
 			int costRent8 = propertyRent.getRent8();
 			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent8);
+			rentCost = costRent8;
 		}
 		if(diceNumber == 9) { 
 			numberOfHouse = own.getOwn9();
 			propertyRent.PropertyRent(9, numberOfHouse);
 			int costRent9 = propertyRent.getRent9();
 			JOptionPane.showMessageDialog(null,"Cost of rent : " + costRent9);
+			rentCost = costRent9;
 		}
+		return rentCost;
 	
+	}
+	public static void checkOwner() {
+		System.out.println("Function checkOwner DiceNumber : " + diceNumber);
+		
+		System.out.println("Function checkOwner whom own the preoperty : " + verifyProperty.getWhon(diceNumber) + "  " + propertyInfo.getArray());
+		//stop hereS
+		
 	}
 	public static void PassGo() {
 		JOptionPane.showMessageDialog(null,"Pass GO! $200 added to your balance");
@@ -531,5 +550,13 @@ public class PropertyTest {
 			NotHouseProperty = false;
 			DiceHolder.setDiceNumber(0);
 		}
+	}
+	public static void testWhomOwn() {
+		System.out.println("own 1 : " + verifyProperty.getWhon(1));
+		System.out.println("own 3 : " + verifyProperty.getWhon(3));
+		System.out.println("own 5 : " + verifyProperty.getWhon(5));
+		System.out.println("own 6 : " + verifyProperty.getWhon(6));
+		System.out.println("own 8 : " + verifyProperty.getWhon(8));
+		System.out.println("own 9 : " + verifyProperty.getWhon(9));
 	}
 }
