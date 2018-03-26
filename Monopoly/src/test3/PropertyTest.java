@@ -294,7 +294,7 @@ public class PropertyTest {
 		}
 		else {
 			String input = getNameProperty();
-			System.out.println("Player own this property " + input + "Rent : ");
+			System.out.println("Player own this property " + input);
 			propertyRentCharge();
 		}
 		}
@@ -432,9 +432,12 @@ public class PropertyTest {
 		own.setOwn(diceNumber, amountHouse.getNumberHold());
 		SubBalance();
 		amountHouse.setNumberHold(0);
+		//stop here
 	}
 	public static void SubBalance() {
+		System.out.println("Enter the sub balance method");
 		balance.SubBalance(currentTurn,setCostAfterOptionHouse());
+		displayBalance();
 	}
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
@@ -520,8 +523,13 @@ public class PropertyTest {
 		System.out.println("Function checkOwner DiceNumber : " + diceNumber);
 		
 		System.out.println("Function checkOwner whom own the preoperty : " + verifyProperty.getWhon(diceNumber) + "  " + propertyInfo.getArray());
-		//stop hereS
-		
+		int ownNumProperty = verifyProperty.getWhon(diceNumber);
+		if(ownNumProperty != currentTurn) {
+			SubBalance();
+		}
+		else {
+			System.out.println("You own this property, what would you like to do?");
+		}
 	}
 	public static void PassGo() {
 		JOptionPane.showMessageDialog(null,"Pass GO! $200 added to your balance");
@@ -542,7 +550,6 @@ public class PropertyTest {
 			System.out.println("Congrats you won!");
 			continueDice = true;
 			System.exit(0);
-		
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "Next Turn");
