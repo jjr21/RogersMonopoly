@@ -108,10 +108,18 @@ public class PropertyTest {
 	public static int setDice() {
 		int max, totalDice, dice, dice2, OverAgain;
 		if(continueDice == false) {
+			int countDicePlayerPrevious =0;
+			if(currentTurn ==1) {
+				countDicePlayerPrevious = DiceHolder.getPlayer1();
+			}
+			if(currentTurn ==2) {
+				countDicePlayerPrevious = DiceHolder.getPlayer2();
+			}
+		System.out.println("Count Dice : " + countDicePlayerPrevious );
 		dice = randomDice();
 		dice2 = randomDice();
 		
-		
+	  
 		
 		//jail status is false
 		
@@ -120,13 +128,7 @@ public class PropertyTest {
 		DiceHolder.addDiceNumber(totalDice);
 		System.out.println("First dice :" + dice + " second dice :" + dice2 + " --- Total of Dices  : " + totalDice);
 		int CountDice = DiceHolder.getDice();
-		int countDicePlayerPrevious =0;
-		if(currentTurn ==1) {
-			countDicePlayerPrevious = DiceHolder.getPlayer1();
-		}
-		if(currentTurn ==2) {
-			countDicePlayerPrevious = DiceHolder.getPlayer2();
-		}
+		
 		System.out.println("test currentTurn return value method : " + countDicePlayerPrevious);
 		CountDice = CountDice + countDicePlayerPrevious;
 		if(CountDice > max) {
@@ -196,7 +198,7 @@ public class PropertyTest {
 				"Purchase Property", JOptionPane.YES_NO_OPTION);
 		if(optionPurchase == JOptionPane.YES_OPTION) {
 			verifyProperty.UpdateOwnProperty(diceNumber,true, currentTurn);
-			colorLand.setPoperties(diceNumber, true);
+			colorLand.setPoperties(diceNumber, true, currentTurn);
 			//System.out.println("TESSSTT COLORLAND : " + colorLand.checkPurple() + " diceNumber : " + diceNumber);
 			buyProperty();
 		}
@@ -249,7 +251,7 @@ public class PropertyTest {
 					"Purchase Property", JOptionPane.YES_NO_OPTION);
 			if(optionPurchaseRailRoad == JOptionPane.YES_OPTION) {
 				verifyProperty.UpdateOwnProperty(5,true, currentTurn);
-				colorLand.setPoperties(diceNumber, true);
+				colorLand.setPoperties(diceNumber, true, currentTurn);
 				amountHouse.setNumberHold(1);
 				balance.SubBalance(currentTurn,200);
 				feedDataHouse();
@@ -421,23 +423,76 @@ public class PropertyTest {
 		}
 	}
 	public static int setCostAfterOptionHouse() {
-		int number =0;;
+		int number =0;
 		number =  amountHouse.getNumberHold();
+		
 		number = number * propertyInfo.getCost();
+		System.out.println("Function Number : " + number);
 		return number;
 	}
 	public static void feedDataHouse() {
 		//System.out.println("feed number amount" + amountHouse.getNumberHold());
 		//own.OwnMediterranean(amountHouse.getNumberHold());
 		own.setOwn(diceNumber, amountHouse.getNumberHold());
-		SubBalance();
+		//SubBalance();
 		amountHouse.setNumberHold(0);
-		//stop here
+		
 	}
 	public static void SubBalance() {
 		System.out.println("Enter the sub balance method");
 		balance.SubBalance(currentTurn,setCostAfterOptionHouse());
 		displayBalance();
+	}
+	public static void subBalanceRent() {
+		System.out.println("Rent Cost Method");
+		//int ownHouseCount =0;
+		int costRent = 0;
+		/*
+		switch(diceNumber) {
+		case 1:
+			ownHouseCount = own.getOwn1();
+			break;
+		case 3:
+			ownHouseCount = own.getOwn3();
+			break;
+		case 5:
+			ownHouseCount = own.getOwn5();
+			break;
+		case 6:
+			ownHouseCount = own.getOwn6();
+			break;
+		case 8:
+			ownHouseCount = own.getOwn8();
+			break;
+		case 9:
+			ownHouseCount = own.getOwn9();
+			break;
+		}
+		*/
+		
+		switch(diceNumber) {
+		case 1:
+			costRent = propertyRent.getRent1();
+			break;
+		case 3:
+			costRent = propertyRent.getRent3();
+			break;
+		case 5:
+			costRent = propertyRent.getRent5();
+			break;
+		case 6:
+			costRent = propertyRent.getRent6();
+			break;
+		case 8:
+			costRent = propertyRent.getRent8();
+			break;
+		case 9:
+			costRent = propertyRent.getRent9();
+			break;
+		}
+		balance.SubBalance(currentTurn, costRent);
+		displayBalance();
+		
 	}
 	public static void displayOwnHouse() {
 		System.out.println("Display boolean status for property : " + diceNumber + " " + getBooleanStatusProperty());
@@ -525,13 +580,25 @@ public class PropertyTest {
 		System.out.println("Function checkOwner whom own the preoperty : " + verifyProperty.getWhon(diceNumber) + "  " + propertyInfo.getArray());
 		int ownNumProperty = verifyProperty.getWhon(diceNumber);
 		if(ownNumProperty != currentTurn) {
-			SubBalance();
+			subBalanceRent();
 		}
 		else {
 			System.out.println("You own this property, what would you like to do?");
+			System.out.println("check properties");
+			//boolean OwnAllColor = getBooleanStatusProperty();
+			boolean OwnAllColor = checkColor(diceNumber);
+			if( OwnAllColor == true) {
+				setOptionHouse();
+			}
+			else {
+				System.out.println("Player dont own all properties");
+			}
+			
+			
 		}
 	}
 	public static void PassGo() {
+		
 		JOptionPane.showMessageDialog(null,"Pass GO! $200 added to your balance");
 		if(currentTurn ==1) {
 			balance.AddBalance(currentTurn, 200);
@@ -539,6 +606,7 @@ public class PropertyTest {
 		if(currentTurn ==2) {
 			balance.AddBalance(currentTurn, 200);
 		}
+		
 	}
 	
 	public static boolean getJailStatus(int a, int b) {
@@ -547,7 +615,12 @@ public class PropertyTest {
 	}
 	public static void CheckBalanceGameOver() {
 		if(balance.getBalance() < 0 || balance.getBalance() == 0) {
-			System.out.println("Congrats you won!");
+			System.out.println("Player 2, Congrats you won!");
+			continueDice = true;
+			System.exit(0);
+		}
+		if(balance.getBalance2() < 0 || balance.getBalance2() == 0) {
+			System.out.println("Player 1, Congrats you won!");
 			continueDice = true;
 			System.exit(0);
 		}
