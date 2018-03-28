@@ -586,7 +586,8 @@ public class PropertyTest {
 			System.out.println("You own this property, what would you like to do?");
 			System.out.println("check properties");
 			//boolean OwnAllColor = getBooleanStatusProperty();
-			boolean OwnAllColor = checkColor(diceNumber);
+			boolean OwnAllColor = checkColor(diceNumber
+					);
 			if( OwnAllColor == true) {
 				setOptionHouse();
 			}
