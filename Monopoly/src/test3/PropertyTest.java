@@ -93,6 +93,7 @@ public class PropertyTest {
 	}
 	public static void runGame() {
 		while(game = true) {
+		displayCurrentPlayerTurn();
 		int dice = setDice();
 		displayBalance();
 		setMatchProperty(dice);
@@ -188,6 +189,9 @@ public class PropertyTest {
 	public static String getNameProperty() {
 		String name = propertyInfo.getArray();
 		return name;
+	}
+	public static void displayCurrentPlayerTurn() {
+		System.out.println("Current Turn : " + currentTurn);
 	}
 	public static Jail getJailRule() {
 		return new Jail();
@@ -613,6 +617,19 @@ public class PropertyTest {
 	public static boolean getJailStatus(int a, int b) {
 		
 		return jailRule;
+	}
+	public static void askTrade() {
+		String input;
+		input = JOptionPane.showInputDialog("DO you want to trade?");
+		if (input.equals("yes")) {
+			boxTrade();
+		}
+		else {
+			System.out.println("NO TRADE");
+		}
+	}
+	public static void boxTrade() {
+		
 	}
 	public static void CheckBalanceGameOver() {
 		if(balance.getBalance() < 0 || balance.getBalance() == 0) {
