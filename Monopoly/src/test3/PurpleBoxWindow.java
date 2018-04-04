@@ -24,7 +24,7 @@ public class PurpleBoxWindow extends JFrame{
 	private String[] Purple = {"Mediterranean Ave", "Baltic Ave"};
 	
 	public PurpleBoxWindow() {
-		runPurpleBoxWindow();
+		//runPurpleBoxWindow();
 	}
 	public void runPurpleBoxWindow() {
 	
@@ -87,7 +87,5 @@ public class PurpleBoxWindow extends JFrame{
 		selectedPurple.setText(selection2);
 	}
 }
-	public static void main(String[] args) {
-		new PurpleBoxWindow();
-	}
+
 }

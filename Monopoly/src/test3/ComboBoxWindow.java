@@ -16,10 +16,18 @@ public class ComboBoxWindow extends JFrame{
 	private JPanel buttonPanel;
 	private JButton yesButton;
 	private String[] color = {"Cyan", "Purple"};
+	private CyanBosWindow cyanFunction;
+	private PurpleBoxWindow purpleFunction;
+	private static int countStatus;
 	public ComboBoxWindow() {
 		runComboBoxWindow();
+		cyanFunction = setCyanFunction();
+		purpleFunction = setPurpleFunction();
+		countStatus = 0;
+		
 		
 	}
+	
 	public void runComboBoxWindow() {
 		setTitle("Trade");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,11 +62,16 @@ public class ComboBoxWindow extends JFrame{
 			
 			setVisible(false);
 			if(colorName.equals("Cyan")) {
-				new CyanBosWindow();
+				//new CyanBosWindow();
+				cyanFunction.runCyanBoxWindow();
+				
 			}
 			if(colorName.equals("Purple")) {
-				new PurpleBoxWindow();
+				//new PurpleBoxWindow();
+				purpleFunction.runPurpleBoxWindow();
+				
 			}
+			
 			//System.exit(0);
 		}
 	}
@@ -92,8 +105,14 @@ public class ComboBoxWindow extends JFrame{
 	}
 }
 	
-public static void main(String[] args) {
-	new ComboBoxWindow();
+	public int returnColorTrade() {
+		return countStatus;
+	}
 	
-}
+	public static CyanBosWindow setCyanFunction() {
+		return new CyanBosWindow();
+	}
+	public static PurpleBoxWindow setPurpleFunction() {
+		return new PurpleBoxWindow();
+	}
 }

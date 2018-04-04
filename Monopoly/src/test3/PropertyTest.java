@@ -16,6 +16,7 @@ public class PropertyTest {
 	//private static Jail stuckJail;
 	//private static HoldNumberDicesJail numberjail;
 	private static ColorProperties colorLand;
+	//private static ComboBoxWindow requestTrade;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
 	private static boolean continueDice = false;
@@ -35,6 +36,7 @@ public class PropertyTest {
 		//stuckJail = getJailRule(); 
 		//numberjail = setNumberJails();
 		colorLand = setColorLand();
+		//requestTrade = setRequestTrade();	
 		displayWelcome();
 		setStartGameBalance();
 		runGame();
@@ -103,6 +105,7 @@ public class PropertyTest {
 		CheckBalanceGameOver();
 		addPlayerTurn();
 		testWhomOwn();
+		
 		}
 	}
 	
@@ -195,6 +198,9 @@ public class PropertyTest {
 	}
 	public static Jail getJailRule() {
 		return new Jail();
+	}
+	public static ComboBoxWindow setRequestTrade() {
+		return new ComboBoxWindow();
 	}
 	public static void setOptionPurchase() {
 		
@@ -619,17 +625,32 @@ public class PropertyTest {
 		return jailRule;
 	}
 	public static void askTrade() {
+		/*
 		String input;
-		input = JOptionPane.showInputDialog("DO you want to trade?");
+		input = JOptionPane.showInputDialog("Do you want to trade?");
 		if (input.equals("yes")) {
 			boxTrade();
+		
 		}
 		else {
 			System.out.println("NO TRADE");
 		}
+		*/
+		int optionTrade = JOptionPane.showConfirmDialog(null, "Would you like to trade property"+ " ?",
+				"Purchase Property House ", JOptionPane.YES_NO_OPTION);
+		if(optionTrade == JOptionPane.YES_OPTION) {
+			
+			boxTrade();
+		}
+		else {
+			System.out.println("No Trade for this moment");
+		}
 	}
 	public static void boxTrade() {
+		System.out.println("IN BOXTRADE");
+		setRequestTrade();
 		
+	
 	}
 	public static void CheckBalanceGameOver() {
 		if(balance.getBalance() < 0 || balance.getBalance() == 0) {
@@ -656,5 +677,8 @@ public class PropertyTest {
 		System.out.println("own 6 : " + verifyProperty.getWhon(6));
 		System.out.println("own 8 : " + verifyProperty.getWhon(8));
 		System.out.println("own 9 : " + verifyProperty.getWhon(9));
+		
+	
+		askTrade();
 	}
 }

@@ -24,7 +24,7 @@ public class CyanBosWindow extends JFrame{
 	private String[] Cyan = {"Oriental Ave", "Vermont Ave", "Connecticut Ave"};
 	
 	public CyanBosWindow() {
-		runCyanBoxWindow();
+		//runCyanBoxWindow();
 	}
 	public void runCyanBoxWindow() {
 	
@@ -87,7 +87,5 @@ public class CyanBosWindow extends JFrame{
 		selectedCyan.setText(selection2);
 	}
 }
-	public static void main(String[] args) {
-		new CyanBosWindow();
-	}
+
 }
