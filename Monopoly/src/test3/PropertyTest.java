@@ -199,9 +199,11 @@ public class PropertyTest {
 	public static Jail getJailRule() {
 		return new Jail();
 	}
+	/*
 	public static ComboBoxWindow setRequestTrade() {
 		return new ComboBoxWindow();
 	}
+	*/
 	public static void setOptionPurchase() {
 		
 		int optionPurchase = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
@@ -648,7 +650,8 @@ public class PropertyTest {
 	}
 	public static void boxTrade() {
 		System.out.println("IN BOXTRADE");
-		setRequestTrade();
+		ComboBoxWindow runFunctionTrade = new ComboBoxWindow();
+		
 		
 	
 	}

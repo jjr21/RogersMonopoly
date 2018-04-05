@@ -59,7 +59,7 @@ public class PurpleBoxWindow extends JFrame{
 			String purpleName = (String) purpleBox.getSelectedItem();
 			System.out.println("You choosed the Purple Property: "+ purpleName);
 			setVisible(false);
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 	public void buildPurpleTradePanel() {

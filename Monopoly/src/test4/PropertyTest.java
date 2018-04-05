@@ -16,7 +16,6 @@ public class PropertyTest {
 	//private static Jail stuckJail;
 	//private static HoldNumberDicesJail numberjail;
 	private static ColorProperties colorLand;
-	//private static ComboBoxWindow requestTrade;
 	private static int diceNumber;
 	private static boolean NotHouseProperty = false;
 	private static boolean continueDice = false;
@@ -36,7 +35,7 @@ public class PropertyTest {
 		//stuckJail = getJailRule(); 
 		//numberjail = setNumberJails();
 		colorLand = setColorLand();
-		//requestTrade = setRequestTrade();	
+		
 		displayWelcome();
 		setStartGameBalance();
 		runGame();
@@ -199,9 +198,7 @@ public class PropertyTest {
 	public static Jail getJailRule() {
 		return new Jail();
 	}
-	public static ComboBoxWindow setRequestTrade() {
-		return new ComboBoxWindow();
-	}
+
 	public static void setOptionPurchase() {
 		
 		int optionPurchase = JOptionPane.showConfirmDialog(null, "Would you like to purchase " + propertyInfo.getArray() + " ?",
@@ -648,7 +645,46 @@ public class PropertyTest {
 	}
 	public static void boxTrade() {
 		System.out.println("IN BOXTRADE");
-		setRequestTrade();
+		Object[] buttons = {"Purple", "Cyan"};
+		Object[] Purplebuttons = {"Baltic Ave", "Mediterranean Ave"};
+		Object[] Cyanbuttons = {"Connecticut Ave", "Oriental Ave", "Vermont Ave"};
+		int optionTrade = JOptionPane.showOptionDialog(null, "Which would you like to trade? ",
+				"Trade Property", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null, buttons, buttons[0]);
+		if(optionTrade ==0) {
+			int optionTradePurple = JOptionPane.showOptionDialog(null, "Which would you like to trade? ",
+					"Trade Property", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null, Purplebuttons, buttons[0]);
+			if(optionTradePurple == 0){
+				JOptionPane.showMessageDialog(null, "Trade -- Baltic Ave");
+			}
+			if(optionTradePurple == 1){
+				JOptionPane.showMessageDialog(null, "Trade -- Mediterranean Ave");
+			}
+		}
+		if(optionTrade ==1) {
+			int optionTradeCyan = JOptionPane.showOptionDialog(null, "Which would you like to trade? ",
+					"Trade Property", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null, Cyanbuttons, buttons[0]);
+			if(optionTradeCyan == 0){
+				JOptionPane.showMessageDialog(null, "Trade -- Connecticut Ave");
+			}
+			if(optionTradeCyan == 1){
+				JOptionPane.showMessageDialog(null, "Trade -- Oriental Ave");
+			}
+			if(optionTradeCyan == 2){
+				JOptionPane.showMessageDialog(null, "Trade -- Vermont Ave");
+			}
+		}
+		if(optionTrade ==2) {
+			
+		}
+		if(optionTrade ==3) {
+			
+		}
+		if(optionTrade ==4) {
+			
+		}
+		if(optionTrade ==5) {
+			
+		}
 		
 	
 	}

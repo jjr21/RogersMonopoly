@@ -59,7 +59,7 @@ public class CyanBosWindow extends JFrame{
 			String cyanName = (String) cyanBox.getSelectedItem();
 			System.out.println("You choosed the Cyan Property: "+ cyanName);
 			setVisible(false);
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 	public void buildCyanTradePanel() {
